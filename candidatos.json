@@ -1,0 +1,14 @@
+{
+    "candidatos": [
+        {
+            "nome": "caneta azul",
+            "numero": 55,
+            "total_votos": 0
+        },
+        {
+            "nome": "bosco",
+            "numero": 10,
+            "total_votos": 0
+        }
+    ]
+}
