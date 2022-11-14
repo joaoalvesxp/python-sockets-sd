@@ -1,13 +1,18 @@
 {
     "candidatos": [
         {
-            "nome": "caneta azul",
-            "numero": 55,
+            "nome": "joao",
+            "numero": 33,
             "total_votos": 0
         },
         {
             "nome": "bosco",
-            "numero": 10,
+            "numero": 55,
+            "total_votos": 0
+        },
+        {
+            "nome": "maria",
+            "numero": 332,
             "total_votos": 0
         }
     ]

@@ -1,13 +1,8 @@
-import socket
-import threading
 import json
 import time
 
-
-
 candidato = dict()
 candidatos = []
-
 usuario = dict()
 usuarios = []
 
@@ -23,8 +18,6 @@ def cadastrar_candidato():
                 break
             except:
                 print('ERRO! Digite apenas NÚMEROS!')
-
-            
 
         candidato['total_votos'] = 0
         candidatos.append(candidato.copy())
@@ -44,8 +37,8 @@ def cadastrar_candidato():
             break
 
 def listar_candidatos():
-    for i in candidatos:
-        print(i.candidato['nome'])
+    for candidato_nome in candidatos:
+        print(candidato_nome['nome'])
 
 def cadastrar_usuario():
     usuario.clear()
@@ -63,7 +56,6 @@ def cadastrar_usuario():
         with open('usuarios.json', 'w', encoding='utf-8') as usuarios_json:
             json.dump(usuarios_salve_json, usuarios_json, indent=4, sort_keys=True, ensure_ascii=False)
 
-
         while True:
             resposta = str(input('Quer continuar adicionando USUÁRIO? [S/N]')).upper()[0]
             if resposta in 'SN':
@@ -73,13 +65,14 @@ def cadastrar_usuario():
         if resposta == 'N':
             break
 
-def iniciar_eleicao():
+def iniciar_votacao():
     duracao_em_minutos = int(input('Duração da Votação em Mintos: '))
     
     print(f'TEMPO DE VOTÇÃO {duracao_em_minutos} min')
     print('CANDIDATOS DISPONÍVEIS')
-
     listar_candidatos()
+
+
 
 def menu_cadastro():
     while True:
@@ -100,4 +93,24 @@ def menu_cadastro():
             print('DIGITE APENAS NÚMEROS!')
             time.sleep(2)
 
-menu_cadastro()
+def menu_principal():
+    while True:
+        try:
+            opcao = int(input('\n\n1 - INICIAR VOTAÇÃO\n2 - PARAR VOTAÇÃO\n3 - CADASTRAR\n4 - SAIR\n\nSelecione:'))
+            if opcao == 1:
+                iniciar_votacao()
+                break
+            elif opcao == 2:
+                parar_votacao()
+                break
+            elif opcao == 3:
+                menu_cadastro()
+                break
+            else:
+                print('OPÇÃO NÃO ENCONTRADA, OPÇÕES DISPONÍVEIS [ 1, 2, 3 ou 4 ]')
+                time.sleep(2)
+        except:
+            print('DIGITE APENAS NÚMEROS!')
+            time.sleep(2)
+
+menu_principal()

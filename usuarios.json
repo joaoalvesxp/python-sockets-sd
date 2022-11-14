@@ -1,9 +1,9 @@
 {
-    "candidatos": [
+    "usuarios": [
         {
-            "login": "k",
+            "login": "qwe",
             "nome": "k",
-            "senha": "k"
+            "senha": "123"
         }
     ]
 }
