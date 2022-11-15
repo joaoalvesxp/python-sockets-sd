@@ -1,5 +1,14 @@
+import socket
 import json
 import time
+import pickle
+PORT = 5050
+FORMATO = 'utf-8'
+SERVER = socket.gethostbyname(socket.gethostname())
+ADDR = (SERVER, PORT)
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(ADDR)
 
 candidato = dict()
 candidatos = []
@@ -85,6 +94,9 @@ def menu_cadastro():
                 cadastrar_usuario()
                 break
             elif opcao == 3:
+                credenciais = ['parar', '']
+                credenciais = pickle.dumps(credenciais)
+                client.send(credenciais)
                 break
             else:
                 print('OPÇÃO NÃO ENCONTRADA, OPÇÕES DISPONÍVEIS [ 1, 2 ou 3 ]')

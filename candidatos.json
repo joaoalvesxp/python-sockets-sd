@@ -3,17 +3,22 @@
         {
             "nome": "joao",
             "numero": 33,
-            "total_votos": 0
+            "total_votos": 444
         },
         {
             "nome": "bosco",
             "numero": 55,
-            "total_votos": 0
+            "total_votos": 444
+        },
+        {
+            "nome": "CANETA AZUL",
+            "numero": 44,
+            "total_votos": 44
         },
         {
             "nome": "maria",
             "numero": 332,
-            "total_votos": 0
+            "total_votos": 100
         }
     ]
 }

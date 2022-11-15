@@ -12,7 +12,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(ADDR)
 
 def login():
-    print('--- Faça o Login para poder votar ---')
+    print('\n--- Faça o Login para poder votar ---\n')
     login = str(input('Login: '))
     senha = str(input('Senha: '))
 
@@ -31,7 +31,7 @@ def autenticar(credenciais_serializada):
 
 while True:
     if login():
-        print('\n\n\n+-----CANDIDATOS DISPONÍVEIS-----+\nEm quem você vai votar?')
+        print('\n\n\n+-----CANDIDATOS DISPONÍVEIS-----+\n\nEm quem você vai votar?\n')
         data = client.recv(4096)
         candidatos = pickle.loads(data)
 
@@ -41,20 +41,18 @@ while True:
                 
         while True:
             listar()
-            candidato_escolhido = int(input('Vote pelo número: '))
+            candidato_escolhido = int(input('\nVote pelo número: '))
             existe = False
             for candidato in candidatos:
                 if candidato_escolhido in candidato.values():
                     existe = True
                     voto = candidato['nome'], candidato['numero']
-                    print('existe')
                     break
             
             if existe:
                 break
-        print(type(voto))
-        print(voto)
         client.send(pickle.dumps(voto))
+        print('VOTO CONFIRMADO COM SUCESSO!')
         break
 
     else:
