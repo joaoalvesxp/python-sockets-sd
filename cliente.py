@@ -1,10 +1,7 @@
 import socket
 import pickle
-import threading
-import time
 
 PORT = 5050
-FORMATO = 'utf-8'
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 
@@ -53,11 +50,22 @@ while True:
                 break
         client.send(pickle.dumps(voto))
         print('VOTO CONFIRMADO COM SUCESSO!')
+        print('ARGUARDANDO RESULTADO ...')
+        end = (socket.gethostbyname(socket.gethostname()), 5151)
+        client_udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #client_udp.connect(end)
+        client_udp.sendto(b'sou cliente', end)
+        mensagem, endereco = client_udp.recvfrom(4096)
+        print(mensagem.decode())
+        client_udp.close()
+
         break
 
     else:
         print('FALHA NA AUTENCAÇÃO!')
         break
+
+
 
 
 

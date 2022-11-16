@@ -1,24 +1,24 @@
 {
     "candidatos": [
         {
-            "nome": "joao",
-            "numero": 33,
-            "total_votos": 444
-        },
-        {
-            "nome": "bosco",
-            "numero": 55,
-            "total_votos": 444
-        },
-        {
-            "nome": "CANETA AZUL",
+            "nome": "C",
             "numero": 44,
-            "total_votos": 44
+            "total_votos": 20258
         },
         {
-            "nome": "maria",
-            "numero": 332,
-            "total_votos": 100
+            "nome": "M",
+            "numero": 99,
+            "total_votos": 30283631
+        },
+        {
+            "nome": "N",
+            "numero": 10,
+            "total_votos": 30283631
+        },
+        {
+            "nome": "x",
+            "numero": 66,
+            "total_votos": 3028363
         }
     ]
 }

@@ -1,6 +1,5 @@
 import socket
 import threading
-import time
 import pickle
 import json
 
@@ -12,6 +11,9 @@ FORMATO = 'utf-8'
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
+
+socket_enviar_resultado = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+socket_enviar_resultado.bind((socket.gethostbyname(socket.gethostname()), 5151))
 
 print("\u001b[1;32m[INICIANDO] Iniciando VOTAÇÃO\033[0;0m")
 
@@ -68,7 +70,6 @@ while True:
     elif credenciais[0] == 'parar':
         server.close()
         break
-
     else:
         resposta = b'falha'
         cliente_socket.sendto(resposta, endereco)
@@ -86,34 +87,45 @@ maior_resultado = max(maior_resultado[2] for maior_resultado in candidatos_resul
 teve_empate = 0
 total_de_votos = 0
 
-print("\u001b[1;32m[VOTÇÃO] ✅ VOTAÇÃO ENCERRADA! MOSTRANDO RESULTADO:\033[0;0m\n")
+def enviar_resultados(resultado_votacao):
+    mensagem, endereco = socket_enviar_resultado.recvfrom(4096)
+    print(f'Mensagem UDP recebida do cliente : {mensagem}')
+    socket_enviar_resultado.sendto(resultado_votacao.encode(), endereco)
+    socket_enviar_resultado.close()
+
+print("\u001b[1;32m[VOTAÇÃO] ✅ VOTAÇÃO ENCERRADA! MOSTRANDO RESULTADO:\033[0;0m\n")
 
 for i in candidatos_resultado:
     total_de_votos += i[2]
     if str(maior_resultado) in str(i[2]):
-        posicao = i.index(i[0])
+        nome_ganhador = i[0]
+        total_de_votos_ganhador = i[2]
         teve_empate += 1
 
 if teve_empate > 1:
-    print(f"🗳️    TOTAL DE VOTOS [ {total_de_votos} ]\n")
+    resultado_votacao = f"🗳️    TOTAL DE VOTOS [ {total_de_votos} ]\n\n"
 
     for i in candidatos_resultado:
         if str(maior_resultado) in str(i[2]):
-            print(f"| {i[0]} - {i[2]} Votos")
+            resultado_votacao += f"| {i[0]} - {i[2]} Votos\n"
 
-    print('\nVOTAÇÃO EMPATADA!\n')
+    resultado_votacao += '\nVOTAÇÃO EMPATADA!\n\n'
 
     candidatos_resultado = sorted(candidatos_resultado, key=lambda inner_list: inner_list[2], reverse=True)
     for i in candidatos_resultado:
-        print(f"[ {i[1]} ] {i[0]} - {i[2]} Votos   {round(((i[2] * 100)/total_de_votos), 2)} % DOS VOTOS TOTAIS.")
+        resultado_votacao += f"[ {i[1]} ] {i[0]} - {i[2]} Votos   {round(((i[2] * 100)/total_de_votos), 2)} % DOS VOTOS TOTAIS.\n"
     
-    print('\n')
+    resultado_votacao += '\n'
 
+    enviar_resultados(resultado_votacao)
+    print(resultado_votacao) 
 else:
-    print(f"\n\n🗳️    TOTAL DE VOTOS [ {total_de_votos} ]")
-    print(f"🏆    {candidatos_resultado[posicao][0]} GANHOU COM O TOTAL DE {candidatos_resultado[posicao][2]} VOTOS!\n\n")
+    resultado_votacao = f"🗳️    TOTAL DE VOTOS [ {total_de_votos} ]\n"
+    resultado_votacao += f"🏆    {nome_ganhador} GANHOU COM O TOTAL DE {total_de_votos_ganhador} VOTOS!\n\n"
     candidatos_resultado = sorted(candidatos_resultado, key=lambda inner_list: inner_list[2], reverse=True)
     for i in candidatos_resultado:
-        print(f"[ {i[1]} ] {i[0]} - {i[2]} Votos   {round(((i[2] * 100)/total_de_votos), 2)} % DOS VOTOS TOTAIS.")
+        resultado_votacao += f"[ {i[1]} ] {i[0]} - {i[2]} Votos   {round(((i[2] * 100)/total_de_votos), 2)} % DOS VOTOS TOTAIS.\n"
     
-    print('\n')
+    resultado_votacao += '\n'
+    enviar_resultados(resultado_votacao) 
+    print(resultado_votacao)

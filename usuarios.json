@@ -1,9 +1,14 @@
 {
     "usuarios": [
         {
-            "login": "qwe",
-            "nome": "k",
-            "senha": "123"
+            "nome": "João",
+            "login": "jxo",
+            "senha": "1"
+        },
+        {
+            "nome": "Maria",
+            "login": "mm",
+            "senha": "1"
         }
     ]
 }
