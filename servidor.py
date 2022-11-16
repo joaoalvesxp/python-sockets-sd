@@ -13,7 +13,11 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
 socket_enviar_resultado = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-socket_enviar_resultado.bind((socket.gethostbyname(socket.gethostname()), 5151))
+def iniciar_socket_udp():
+    socket_enviar_resultado.bind((socket.gethostbyname(socket.gethostname()), 5151))
+socket_udp = threading.Thread(target=iniciar_socket_udp)
+
+socket_udp.start()
 
 print("\u001b[1;32m[INICIANDO] Iniciando VOTAÇÃO\033[0;0m")
 
@@ -44,6 +48,12 @@ def contabilizar_voto(voto):
 
 
 server.listen()
+
+def enviar_resultados(resultado_votacao):
+        mensagem, endereco = socket_enviar_resultado.recvfrom(4096)
+        print(f'Mensagem UDP recebida do cliente : {mensagem}')
+        socket_enviar_resultado.sendto(resultado_votacao.encode(), endereco)
+        socket_enviar_resultado.close()
 
 while True:
     cliente_socket, endereco = server.accept()
@@ -87,11 +97,6 @@ maior_resultado = max(maior_resultado[2] for maior_resultado in candidatos_resul
 teve_empate = 0
 total_de_votos = 0
 
-def enviar_resultados(resultado_votacao):
-    mensagem, endereco = socket_enviar_resultado.recvfrom(4096)
-    print(f'Mensagem UDP recebida do cliente : {mensagem}')
-    socket_enviar_resultado.sendto(resultado_votacao.encode(), endereco)
-    socket_enviar_resultado.close()
 
 print("\u001b[1;32m[VOTAÇÃO] ✅ VOTAÇÃO ENCERRADA! MOSTRANDO RESULTADO:\033[0;0m\n")
 
@@ -117,6 +122,7 @@ if teve_empate > 1:
     
     resultado_votacao += '\n'
 
+    
     enviar_resultados(resultado_votacao)
     print(resultado_votacao) 
 else:
